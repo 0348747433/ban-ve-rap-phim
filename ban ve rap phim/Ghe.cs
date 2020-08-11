@@ -12,6 +12,7 @@ namespace ban_ve_rap_phim
         public int ID;
         public int SoGhe;
         public string TinhTrangGhe;
+        public int id_Phong;
 
         public Ghe() { }
 

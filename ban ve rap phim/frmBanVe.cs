@@ -18,11 +18,11 @@ namespace ban_ve_rap_phim
 
     public partial class frmBanVe : Form
     {
+        List<Ghe> DanhSachGhe = new List<Ghe>();
         public frmBanVe()
         {
             InitializeComponent();
 
-            Load_Seat_From_SQL();
             Load_Phim();
 
         }
@@ -50,6 +50,31 @@ namespace ban_ve_rap_phim
                     cbGioChieu.Items.Add(ngayGioChieuPhim.GioChieuPhim);
                 }
             }
+        }
+
+        private void Load_Phong_Phim(string ID_From_lbID)
+        {
+            // Buoc 1 : Lay gio phim nhu the nao ? --> Truy van select tat ca thong tin cua bang phim va bang gio (SELECT * FROM phim , gio,....) (done)
+            // Buoc 2 : Lam sao de luu tru du lieu de co the tai su dung ? --> Do du lieu vao DataTable (done)
+            // Buoc 3.1 : Phat sinh van de --> Lam sao de luu tru thong tin gio phim de cac lop va ham khac co the su dung ? --> Tao ra mot lop NgayGioPhim, luu tru lop
+            // Buoc 3.2 : Phat sinh van de 2 --> Lam sao de luu tru du lieu nhieu va lon cung mot luc ? --> Su dung vong lap foreach
+            // Buoc 4 : Hien thi du lieu dataTable minh vua luu tru nhu the nao ? --> Hien thi tren 2 cai comboBox
+
+            // buoc 1 : 
+            string query = "SELECT * FROM Phim , Phong WHERE Phim.ID = Phong.id_Phim";
+            // buoc 2 :
+            DataTable dt = DataProvider.Instance.ExcuteQuery(query);
+            // buoc 3 : 
+            foreach (DataRow row in dt.Rows)
+            {
+                Phong phong = new Phong(row);
+                int ID = int.Parse(ID_From_lbID);
+                if (ID == phong.id_phim)
+                {
+                    lbSoPhong.Text = phong.SoPhong.ToString();
+                    Load_Seat_From_SQL(phong);
+                }
+            }
             
 
         }
@@ -65,16 +90,19 @@ namespace ban_ve_rap_phim
             }
         }
 
-        private void Load_Seat_From_SQL()
+        private void Load_Seat_From_SQL(Phong phong)
         {
+            flpSeat.Controls.Clear();
+            // Ghe.id_phong = phong.ID
+            
             // TODO - Sua lai chuc nang load theo CSDL
             //Buoc 1 : 
-            string query = "SELECT * FROM Ghe ";
-            DataTable dt = DataProvider.Instance.ExcuteQuery(query);
+            string query_select_ghe = "SELECT * FROM Ghe , Phong WHERE Ghe.id_phong = Phong.ID AND Ghe.id_phong =  "+phong.ID;
+            DataTable dt_select_ghe = DataProvider.Instance.ExcuteQuery(query_select_ghe);
 
             List<Ghe> DanhSachGhe = new List<Ghe>();
 
-            foreach(DataRow row in dt.Rows)
+            foreach(DataRow row in dt_select_ghe.Rows)
             {
                 Ghe ghe = new Ghe(row);
                 DanhSachGhe.Add(ghe);
@@ -95,13 +123,38 @@ namespace ban_ve_rap_phim
                     {
                         btn.BackColor = Color.Pink;
                     }
+                    else if(ghe.TinhTrangGhe == "DA DAT")
+                    {
+                        btn.BackColor = Color.Yellow;
+                    }
 
                     flpSeat.Controls.Add(btn);
+
+                    // Lay ra danh sach ghe 
+
+                    btn.Click += Btn_Click;
                     break;
                 }
             }
             
 
+
+        }
+
+        private void Btn_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            if(btn.BackColor == Color.Yellow)
+            {
+                MessageBox.Show("Ghe nay da dat roi", "Dat ghe");
+                return;
+            }
+            btn.BackColor = Color.Purple;
+            // lay ra cai so ghe 
+            int get_seat_number = int.Parse(btn.Text);
+            Ghe ghe = new Ghe();
+            ghe.SoGhe = get_seat_number;
+            DanhSachGhe.Add(ghe);
 
         }
 
@@ -138,6 +191,8 @@ namespace ban_ve_rap_phim
                         }
                     }
                     Load_Gio_Phim(lbID.Text);
+                    Load_Phong_Phim(lbID.Text);
+                    
                     break;
                 
                 case "SexAndZen":
@@ -149,6 +204,8 @@ namespace ban_ve_rap_phim
                         }
                     }
                     Load_Gio_Phim(lbID.Text);
+                    Load_Phong_Phim(lbID.Text);
+                  
                     break;
             }
             
@@ -166,7 +223,24 @@ namespace ban_ve_rap_phim
 
         private void btnMuaVe_Click(object sender, EventArgs e)
         {
-            ChucNangMuaVe();
+            DialogResult dr = MessageBox.Show("Ban co chac dat ghe khong ? ", "Data ghe", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if(dr == DialogResult.Yes)
+            {
+                // Update Ghe
+                DataTable dt = null;
+                foreach (Ghe ghe in DanhSachGhe)
+                {
+                    dt = DataProvider.Instance.ExcuteQuery("PROC_updateTinhTrangGhe @soGhe", new object[] { ghe.SoGhe });
+                }
+                // Update thanh cong thi in ra message box
+                MessageBox.Show("Mua ve thanh cong ! ");
+                Load_Phong_Phim(lbID.Text);
+            }
+            return;
+            
+            
+            
+            
         }
 
         private void ChucNangMuaVe()

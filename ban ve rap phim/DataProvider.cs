@@ -20,7 +20,7 @@ namespace ban_ve_rap_phim
 			private set { DataProvider.instance = value; }
 		}
 
-		string connectionString = @"Data Source=DESKTOP-QQ3LNM1\SQLEXPRESS;Initial Catalog=BanVeRapPhim;Integrated Security=True";
+		string connectionString = @"Data Source=DESKTOP-KPK7S1R;Initial Catalog=BanVeRapPhim;Integrated Security=True";
 		SqlConnection sqlconnection;
 
 		private DataProvider() { }

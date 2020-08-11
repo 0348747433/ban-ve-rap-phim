@@ -69,6 +69,7 @@
     <Compile Include="Ghe.cs" />
     <Compile Include="NgayGioChieuPhim.cs" />
     <Compile Include="Phim.cs" />
+    <Compile Include="Phong.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmDangNhap.resx">
