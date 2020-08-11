@@ -86,8 +86,8 @@ namespace ban_ve_rap_phim
                 for (int i = 0; i < ghe.SoGhe; i++)
                 {
                     Button btn = new Button();
-                    btn.Width = 100;
-                    btn.Height = 100;
+                    btn.Width = 70;
+                    btn.Height = 70;
                     btn.Text = ghe.SoGhe.ToString();
 
                     // Kiem tra tinh trang ghe
@@ -172,6 +172,16 @@ namespace ban_ve_rap_phim
         private void ChucNangMuaVe()
         {
             
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void flpSeat_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

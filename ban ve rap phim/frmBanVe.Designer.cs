@@ -95,12 +95,13 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.flpSeat);
-            this.groupBox1.Location = new System.Drawing.Point(525, 12);
+            this.groupBox1.Location = new System.Drawing.Point(512, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(840, 525);
+            this.groupBox1.Size = new System.Drawing.Size(832, 678);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // flpSeat
             // 
@@ -108,8 +109,9 @@
             this.flpSeat.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flpSeat.Location = new System.Drawing.Point(3, 27);
             this.flpSeat.Name = "flpSeat";
-            this.flpSeat.Size = new System.Drawing.Size(834, 495);
+            this.flpSeat.Size = new System.Drawing.Size(826, 648);
             this.flpSeat.TabIndex = 0;
+            this.flpSeat.Paint += new System.Windows.Forms.PaintEventHandler(this.flpSeat_Paint);
             // 
             // btnMuaVe
             // 
@@ -148,7 +150,7 @@
             // lbID
             // 
             this.lbID.AutoSize = true;
-            this.lbID.Location = new System.Drawing.Point(429, 47);
+            this.lbID.Location = new System.Drawing.Point(408, 42);
             this.lbID.Name = "lbID";
             this.lbID.Size = new System.Drawing.Size(50, 25);
             this.lbID.TabIndex = 19;
